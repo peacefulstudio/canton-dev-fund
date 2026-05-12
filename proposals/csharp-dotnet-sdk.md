@@ -358,7 +358,7 @@ All milestones are designed to be ≤ 1 quarter in duration with clear acceptanc
 | Conference/meetup presentation (optional) | Present SDK at a Canton or .NET community event if opportunity arises. | — |
 | **M4 maximum (base)** | | **800,000 CC** |
 
-**Acceleration bonus.** A +20% bonus of **160,000 CC** is added to the M4 payout if all M4 gates above — per-event tranches plus the milestone-completion criteria — are paid in full within **15 months of grant approval** — three months ahead of the 18-month deadline, leaving roughly nine months of M4 runtime after M3 acceptance (~6 months in, per §Volatility Stipulation) to close adoption events. This follows the convention in merged dev-fund grants (Token Standard V2 +20%, ISS-BFT +20%, LSU +10/20%, PQS +20%, Traffic-Based App Rewards +15%), most of which attach the acceleration clause to a final or adoption milestone rather than to the engineering delivery phase. The bonus pays only if the full base M4 tranche is paid in full — partial M4 completion does not produce a partial bonus. Maximum M4 with acceleration: **960,000 CC**. Maximum grant total with acceleration: **2,660,000 CC**.
+**Acceleration bonus.** A +20% bonus of **160,000 CC** is added to the M4 payout if all M4 gates above — per-event tranches plus the milestone-completion criteria — are paid in full within **15 months of grant approval** — three months ahead of the 18-month deadline, leaving roughly nine months of M4 runtime after M3 acceptance (~6 months in, per §Volatility Stipulation) to close adoption events. This follows the convention in merged dev-fund grants (Token Standard V2 +20%, ISS-BFT +20%, LSU +10/20%, PQS +20%, Traffic-Based App Rewards +15%), most of which attach the acceleration clause to a final or adoption milestone rather than to the engineering delivery phase. The bonus pays only if the full base M4 tranche is paid in full — partial M4 completion does not produce a partial bonus. Maximum M4 with acceleration: **960,000 CC**. Maximum M1–M4 total (engineering + Cure53 audit + acceleration): **2,844,000 CC** — see [§Funding](#funding) for the breakdown.
 
 **Deadline rationale.** The dev-fund standard is ≤9 months from grant approval. M4 here targets adoption among **regulated TradFi institutions** whose procurement and integration cycles routinely run 9–18 months for the first conversation alone — a structurally slower adopter set than the developer-tooling adopters typical of other dev-fund grants. A 9-month M4 deadline against this adopter profile is near-certain to forfeit the adoption tranche the proportionality-of-payout-to-adoption principle (raised in PR review) was designed to reward. The 18-month deadline is the shortest window in which multiple TradFi institutions can realistically be expected to close integration, and is requested as an explicit exception to the 9-month default with this rationale.
 
@@ -411,7 +411,16 @@ The Tech & Ops Committee will evaluate completion based on:
 
 ## Funding
 
-**Total Funding Request:** 2,500,000 CC base (~$375,000 USD) for initial delivery (M1–M4), with a conditional **+20% M4 acceleration bonus** (up to +160,000 CC, see §M4 *Acceleration bonus*), plus 300,000 CC per quarter (~$45,000 USD) for ongoing maintenance. The base ask is sized at **0.5% of the Development Fund's annual allocation** (500M CC per CIP-0082); with acceleration triggered, the maximum reaches 2,660,000 CC (~$399,000 USD).
+**Total Funding Request:**
+
+- **2,500,000 CC (~$375,000 USD) M1–M4 base**, split as:
+  - 1,700,000 CC engineering — M1–M3 (open-source release, codegen migration, `Canton.Splice.*` NuGet packages, full Ledger + PQS API, docs and a sample application equivalent to cn-quickstart in C#)
+  - up to 800,000 CC adoption — M4 (~32% of the base, paid per-event against TradFi-institution and external-application gates)
+- **184,000 CC (~$27,600 USD)** — Cure53 security-audit line, held outside the M1–M4 envelope as a pass-through cost (see [Appendix C](#appendix-c--security-audit-cure53))
+- **+160,000 CC (+20% on the M4 base)** — conditional acceleration bonus if all M4 gates are met within 15 months of grant approval (see §M4 *Acceleration bonus*)
+- **300,000 CC per quarter (~$45,000 USD)** — ongoing maintenance under M5+
+
+The M1–M4 base is sized at **0.5% of the Development Fund's annual allocation** (500M CC per CIP-0082). With the audit line and the M4 acceleration bonus both included, the **maximum M1–M4 total is 2,844,000 CC (~$426,600 USD)**.
 
 ### Cost Basis
 
@@ -446,11 +455,11 @@ The funding is structured as fixed-price milestones, scoped by deliverable compl
 | Proposal | Scope | Funding |
 |----------|-------|---------|
 | Go SDKs + Python DAZL (#38, Noders) | Go gRPC client + codegen + wallet SDK + Python patches + Cure53 security audit. | 2,260,000 CC |
-| **This C# SDK (#46)** | **C# codegen + gRPC + JSON API + PQS + samples + cross-platform CI + adoption.** | **2,500,000 CC** |
+| **This C# SDK (#46)** | **C# codegen + gRPC + JSON API + PQS + samples + cross-platform CI + adoption + Cure53 security audit.** | **2,500,000 CC engineering + 184,000 CC audit = 2,684,000 CC all-in** |
 | DAR-to-TypeScript Codegen (#74) | Single-purpose codegen tool (TypeScript only) | 330,000 CC |
 | Canton dApp SDK (#69, Digital Asset) | TypeScript dApp-to-wallet SDK (CIP-0103), different stack layer | 8,170,000 CC |
 
-This proposal delivers broader scope than the Go SDK (additional JSON API client, PQS client, production-target CI matrix) for a comparable total cost, with funding tied to per-milestone ecosystem-adoption gates. A comparable Cure53 security audit is in preparation for this proposal — see [Appendix C](#appendix-c--security-audit-cure53-in-preparation).
+This proposal delivers broader scope than the Go SDK (additional JSON API client, PQS client, production-target CI matrix) for a comparable total cost, with funding tied to per-milestone ecosystem-adoption gates. The Cure53 security audit is quoted at **184,000 CC (~$27,600 USD)** and is held as a separate audit-cost line outside the M1–M4 engineering envelope — see [Appendix C](#appendix-c--security-audit-cure53). The NODERS Go SDK audit precedent under #38 came in at ~160,000 CC / $24K; the ~15% uplift here reflects the broader application scope being audited (full client surface across gRPC, JSON API, and PQS, plus the JVM helper).
 
 ### Payment Breakdown by Milestone
 
@@ -460,16 +469,17 @@ This proposal delivers broader scope than the Go SDK (additional JSON API client
 | M2 — Full API Coverage + PQS | 625,000 CC upon committee acceptance | 25% |
 | M3 — Docs, Samples, Launch | 475,000 CC upon committee acceptance | 19% |
 | M4 — Adoption & Ecosystem Integration | up to 800,000 CC, paid per-event | up to 32% |
-| **Total M1–M4 (base)** | **2,500,000 CC** | **100%** |
-| M4 acceleration bonus (conditional, see §M4) | +160,000 CC if all M4 gates met within 15 months of grant approval | (+6%) |
-| **Maximum total M1–M4 with acceleration** | **up to 2,660,000 CC** | **up to 106%** |
+| **Total M1–M4 engineering (base)** | **2,500,000 CC** | **100%** |
+| Cure53 security audit (pass-through, see Appendix C) | 184,000 CC paid alongside M3 acceptance | (separate) |
+| M4 acceleration bonus (conditional, see §M4) | +160,000 CC if all M4 gates met within 15 months of grant approval | (+6% of M1–M4 engineering base) |
+| **Maximum total M1–M4 (engineering + audit + acceleration)** | **up to 2,844,000 CC** | — |
 | M5+ — Quarterly Maintenance | 300,000 CC per quarter upon committee acceptance | (separate) |
 
 **Milestone 1 (24%) — 600,000 CC upon committee acceptance.** *Establishes the open-source project, CI/CD across platforms, NuGet publishing, and migrates the codegen toolchain onto the `daml-lf-archive` JVM-helper architecture so the SDK inherits LF version dispatch and Smart Contract Upgrade compatibility from the upstream library. Foundational infrastructure that de-risks all subsequent milestones.*
 
 **Milestone 2 (25%) — 625,000 CC upon committee acceptance.** *Heaviest single-engineering milestone — full Ledger API surface across both gRPC and JSON protocols, PQS client, async streaming. Engineering scope unchanged from the prior revision; the modest reduction reflects amortization with the M1 codegen-toolchain foundation, with the JVM helper and `Canton.Splice.*` packaging in place after M1 the per-endpoint marginal effort drops.*
 
-**Milestone 3 (19%) — 475,000 CC upon committee acceptance.** *Documentation and samples turn a library into an adoptable SDK. Delivers the DocFX API reference site, console + ASP.NET Core sample applications (including a Token Standard interface example), and a coordinated public launch. The tightened envelope reflects leverage from the M1+M2 surface area: the documentation generator wraps an already-public API surface, and sample apps consume that same surface rather than re-implementing it.*
+**Milestone 3 (19%) — 475,000 CC upon committee acceptance.** *Documentation and samples turn a library into an adoptable SDK. Delivers the DocFX API reference site, console + ASP.NET Core sample applications (including a Token Standard interface example), and a coordinated public launch. M3 also hosts the Cure53 security audit window between M2 acceptance and launch — see [Appendix C](#appendix-c--security-audit-cure53). The tightened envelope reflects leverage from the M1+M2 surface area: the documentation generator wraps an already-public API surface, and sample apps consume that same surface rather than re-implementing it.*
 
 **Milestone 4 (up to 32%) — up to 800,000 CC, paid per-event:**
 - **100,000 CC** per regulated TradFi institution integrating the SDK against a Canton network — up to 3 institutions = **300,000 CC**
@@ -480,11 +490,11 @@ This proposal delivers broader scope than the Go SDK (additional JSON API client
 
 **Milestone 5+ — 300,000 CC per quarter upon committee acceptance.** *SDKs without active maintenance become liabilities. Covers protocol compatibility, security patches, dependency updates, and community support.*
 
-> *Context: The base M1–M4 ask of 2,500,000 CC is unchanged from the prior revision and represents 0.5% of the Development Fund's annual allocation of 500M CC (per CIP-0082); with the conditional M4 acceleration bonus triggered, the maximum reaches 2,660,000 CC (≈0.53% of annual allocation). The internal split (M1 24% / M2 25% / M3 19% / M4 up to 32% base) is reweighted toward the adoption milestone in line with recent dev-fund decisions on comparable SDK grants. USD equivalents are based on a CC/USD rate of $0.15 as of May 2026.*
+> *Context: The base M1–M4 engineering ask of 2,500,000 CC is unchanged from the prior revision and represents 0.5% of the Development Fund's annual allocation of 500M CC (per CIP-0082). With the 184,000 CC Cure53 audit line and the conditional M4 acceleration bonus both included, the maximum reaches 2,844,000 CC (≈0.57% of annual allocation). The internal split (M1 24% / M2 25% / M3 19% / M4 up to 32%) is computed against the 2,500,000 CC engineering base and is reweighted toward the adoption milestone in line with recent dev-fund decisions on comparable SDK grants. The Cure53 audit sits outside that split as a pass-through cost. USD equivalents are based on a CC/USD rate of $0.15 as of May 2026; the audit line additionally references EUR/USD = 1.18 against Cure53's €23,400 quote (see [Appendix C](#appendix-c--security-audit-cure53)).*
 
 ### Volatility Stipulation
 
-M1–M3 engineering delivery spans approximately 6 months from grant approval. M4 then opens on M3 acceptance and runs with an 18-month deadline from grant approval per §M4. The grant is denominated in fixed Canton Coin and will require a re-evaluation at the 6-month mark per the standard template clause — which falls at approximately M3 acceptance — and a second re-evaluation at the 12-month mark to cover the extended M4 window. The quarterly maintenance milestone (M5+) is re-evaluated each quarter by default at the then-current CC/USD rate. The re-evaluation points also cover scope reality: if the multi-synchronizer surface or the Canton 3.5 transition demands materially more engineering than envelope-priced, that is raised at the same review.
+M1–M3 engineering delivery spans approximately 6 months from grant approval. M4 then opens on M3 acceptance and runs with an 18-month deadline from grant approval per §M4. The grant is denominated in fixed Canton Coin and will require a re-evaluation at the 6-month mark per the standard template clause — which falls at approximately M3 acceptance — and a second re-evaluation at the 12-month mark to cover the extended M4 window. The quarterly maintenance milestone (M5+) is re-evaluated each quarter by default at the then-current CC/USD rate. The Cure53 audit line additionally carries an EUR exposure — the 184,000 CC figure is locked at signing against Cure53's €23,400 quote at EUR/USD = 1.18, and any drift between signing and Cure53 invoicing is reconciled at the same standard review points rather than mid-audit. The re-evaluation points also cover scope reality: if the multi-synchronizer surface or the Canton 3.5 transition demands materially more engineering than envelope-priced, that is raised at the same review.
 
 ---
 
@@ -555,7 +565,7 @@ By providing first-class .NET support, Canton Network can unlock adoption by tra
 | Low adoption | Adoption milestones with ecosystem gates ensure funding is tied to real usage, not just delivery |
 | Maintainer availability | Maintenance milestone ensures ongoing commitment; documentation enables community takeover if needed |
 | Cross-platform issues | CI matrix covers the production targets (Windows x64, Linux Arm64) plus macOS Arm64 as a developer-experience target, exercised from M1 |
-| Security defects in client-side code paths | Independent third-party security audit (Cure53) scheduled into M3 — see [Appendix C](#appendix-c--security-audit-cure53-in-preparation) |
+| Security defects in client-side code paths | Independent third-party security audit (Cure53) — quote received (18 PD / €23,400 / 184,000 CC), scheduled into M3 — see [Appendix C](#appendix-c--security-audit-cure53) |
 
 ---
 
@@ -975,25 +985,37 @@ After drafting the appendix above we ran a working experiment: a small upstream 
 
 ----
 
-## Appendix C — Security audit (Cure53), in preparation
+## Appendix C — Security audit (Cure53)
 
 The Go SDK proposal (#38) had a third-party security audit by Cure53 added during committee review. The same reasoning applies here: an SDK that TradFi institutions will integrate against Canton on .NET on Windows must clear independent security review before any regulated counterparty can ship it into production. This appendix preempts the request.
 
-**What we've done.** A quote request was sent to `hello@cure53.de` on the 12th of May 2026 covering codegen, gRPC and JSON API clients, PQS client, authentication, and the JVM helper — approximately 13,000 LOC of production C# across `peacefulstudio/canton-ledger-api-csharp` (~3,600 LOC) and `peacefulstudio/daml-codegen-csharp` (~9,000 LOC), plus the Scala JVM helper wrapping `daml-lf-archive` delivered under M1/M2. The request signalled willingness to descope (codegen-only vs. full client surface) so Cure53 can return options rather than a single number.
+**Scope communicated.** A quote request was sent to `hello@cure53.de` on the 12th of May 2026 covering codegen, gRPC and JSON API clients, PQS client, authentication, and the JVM helper — approximately 13,000 LOC of production C# across `peacefulstudio/canton-ledger-api-csharp` (~3,600 LOC) and `peacefulstudio/daml-codegen-csharp` (~9,000 LOC), plus the Scala JVM helper wrapping `daml-lf-archive` delivered under M1/M2.
 
-**Quoting against scope that is still being written.** A meaningful share of the M1–M3 surface — full JSON API coverage, the PQS client, and the JVM helper — only reaches its audited form at M2/M3 completion, so the quote necessarily covers planned scope and LOC estimates rather than a final code drop. This is intentional, not an oversight: waiting until M3 to commission the audit would push the audit itself past the M3 window and defer the security review that institutional adopters expect. Any contingency Cure53 attaches for unwritten portions will be accepted and reflected in the §Funding audit-cost line when the quote is converted into a concrete figure.
+**Quote received (12 May 2026).** Cure53 returned an effort estimate of **18 person-days at €23,400** (≈$27,600 USD ≈ **184,000 CC** at CC/USD = $0.15 and EUR/USD = 1.18; ECB closing rate on 11 May 2026: 1.1765), structured into four white-box pen-test + code-audit work packages plus admin / fix verification:
+
+| Work package | Scope | Effort |
+|---|---|---|
+| WP1 | Canton .NET codegen and DAR parsing (including the Scala JVM helper wrapping `daml-lf-archive`) | ~5 PD |
+| WP2 | Canton .NET gRPC client and authentication | ~4 PD |
+| WP3 | Canton .NET HTTP / JSON client and PQS | ~4 PD |
+| WP4 | Canton .NET runtime and bindings | ~3 PD |
+| — | Project admin, report writing, fix verification | ~2 PD |
+
+The quote sits ~15% above the NODERS Go SDK Cure53 precedent (~$24,000 USD / 160,000 CC under proposal #38) — the uplift reflects the broader application scope being audited here (full client surface across gRPC, JSON API, and PQS, plus the JVM helper) versus the Go envelope. The work packages map onto the M1–M3 deliverables of this proposal end-to-end, with no gap and no overlap.
+
+**Quoting against scope that is still being written.** A meaningful share of the M1–M3 surface — full JSON API coverage, the PQS client, and the JVM helper — only reaches its audited form at M2/M3 completion, so the quote necessarily covers planned scope and LOC estimates rather than a final code drop. This is intentional, not an oversight: waiting until M3 to commission the audit would push the audit itself past the M3 window and defer the security review that institutional adopters expect. Any contingency Cure53 attaches at signing once the final scope is locked is absorbed within the 184,000 CC envelope; if the final code surface materially exceeds the LOC estimate above, the delta is raised at the standard re-evaluation point per §Volatility Stipulation rather than mid-audit.
 
 **How the audit fits into this proposal.**
 
-- **Remediation engineering — absorbed within the existing envelope, with severity-tiered turnaround.** Fixing findings from a Cure53 review is the same hardening work the M1–M3 Cost Basis already funds: test hardening (M1), defensive validation across the full ~40-endpoint API surface (M2), and authentication and serialisation paths (M1/M2). Peaceful Studio commits to landing all audit remediation within the M1–M3 base of 2,500,000 CC, with the following turnaround relative to Cure53 report delivery:
+- **Remediation engineering — absorbed within the existing envelope, with severity-tiered turnaround.** Fixing findings from a Cure53 review is the same hardening work the M1–M3 Cost Basis already funds: test hardening (M1), defensive validation across the full ~40-endpoint API surface (M2), and authentication and serialisation paths (M1/M2). Peaceful Studio commits to landing all audit remediation within the M1–M3 engineering base of 1,700,000 CC, with the following turnaround relative to Cure53 report delivery:
   - **Critical / High-severity findings:** patched within **30 days**, prioritised over in-flight engineering work; security advisory published in the same window.
   - **Medium-severity findings:** remediated within **60 days**.
   - **Low / Informational findings:** rolled into the next scheduled minor release within the M5+ maintenance window.
 
   No new milestone, no scope cut on §M1–§M3 deliverables, no shifted M1 or M2 dates.
-- **Cure53 vendor fee — added as a delta once quoted.** The fee itself is a pass-through cost that cannot be sized until the quote arrives. Order-of-magnitude expectation from the #38 precedent (NODERS Go SDK audit ≈ $24,000 USD / ~160,000 CC at $0.15), with potential upward adjustment given the larger code surface area here. The exact figure will be added to §Funding as a separate audit-cost line once Cure53 responds — kept transparent and accounted for separately from engineering payouts.
+- **Cure53 vendor fee — 184,000 CC, separate audit-cost line.** The fee is a pass-through cost held outside the M1–M4 engineering envelope and outside the M4 acceleration calculation. It is paid alongside M3 acceptance against Cure53's invoice. The CC amount is locked at signing using the standard $0.15/CC rate and an EUR/USD reference of 1.18 against Cure53's €23,400 quote.
 
-**Timing.** The audit slots into M3, between M2 acceptance (full API coverage shipped) and M3 launch (coordinated public release), so findings are remediated against the API surface institutions will actually consume rather than a moving target. If Cure53 responds before this proposal is accepted, this appendix is updated with concrete numbers and the audit-cost line is added to §Funding. If the reply arrives after acceptance, the line is added at the next re-evaluation point per §Volatility Stipulation.
+**Timing.** The audit slots into M3, between M2 acceptance (full API coverage shipped) and M3 launch (coordinated public release), so findings are remediated against the API surface institutions will actually consume rather than a moving target.
 
 **Why proactively.** Asking for the audit ourselves rather than waiting for committee request accelerates the timeline (removing the back-and-forth that delayed #38), lets us coordinate scope with Cure53 directly rather than inheriting a scope written by someone less familiar with the codebase, and signals that institutional security-review expectations are being met from the start.
 
@@ -1009,6 +1031,7 @@ The Go SDK proposal (#38) had a third-party security audit by Cure53 added durin
 - [digital-asset/daml-net (archived)](https://github.com/digital-asset/daml-net)
 - [Stack Overflow Developer Survey 2025](https://survey.stackoverflow.co/2025/technology)
 - [GitHub Octoverse 2025](https://octoverse.github.com/)
+- [ECB euro reference exchange rate — USD](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html) — source for the EUR/USD closing rate (1.1765 on 11 May 2026) underpinning the Cure53 audit-line FX lock in §Funding and Appendix C
 
 ---
 
