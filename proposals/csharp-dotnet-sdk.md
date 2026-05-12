@@ -3,14 +3,14 @@
 **Author:** Matthieu Le Berre (Peaceful Studio)<br>
 **Status:** Under review<br>
 **Created:** 2026-03-05<br>
-**Last Revised:** 2026-05-09<br>
+**Last Revised:** 2026-05-12<br>
 **[Champion](https://github.com/canton-foundation/canton-dev-fund/blob/main/sig-directory.md):** need Champion
 
 ---
 
 ## Abstract
 
-**Canton Network is effectively unreachable from C# / .NET today.** Digital Asset's previous bindings (`daml-net`) were archived in January 2025 without ever publishing NuGet packages. The current Canton Ledger API v2 (gRPC + JSON, OpenAPI-specified, stable since Canton 3.4) cannot be consumed from .NET without weeks of bespoke integration work per team: pointing a generic OpenAPI generator (NSwag, Kiota, `openapi-generator-cli`) at the published JSON spec produces a client with eleven empty-object classes (`Empty1`–`Empty10`), three independent `HashingSchemeVersion` enums, `object`-typed DAML payload fields, and explicitly broken `required` semantics — none of it a generator bug, all of it baked into the spec. We catalogued five structural defects, summarised in [Appendix B](#appendix-b--why-a-generic-openapi-generator-is-not-enough). Every team that has integrated to date has written the same wrapper layer.
+**Canton Network is effectively unreachable from C# / .NET today.** Digital Asset's previous bindings (`daml-net`) were archived in January 2025 without ever publishing NuGet packages. The current Canton Ledger API v2 (gRPC + JSON, OpenAPI-specified, stable since Canton 3.4) cannot be consumed from .NET without weeks of bespoke integration work per team: pointing a generic OpenAPI generator (NSwag, Kiota, `openapi-generator-cli`) at the published JSON spec produces a client with eleven empty-object classes (`Empty` plus `Empty1`–`Empty10`), three independent `HashingSchemeVersion` enums, `object`-typed DAML payload fields, and explicitly broken `required` semantics — none of it a generator bug, all of it baked into the spec. We catalogued five structural defects, summarised in [Appendix B](#appendix-b--why-a-generic-openapi-generator-is-not-enough). Every team that has integrated to date has written the same wrapper layer.
 
 **This matters because Canton's institutional target market is Microsoft-first.** TradFi institutions — banks, asset managers, custodians, exchange operators — run their back-office, trading, settlement, and reconciliation stacks on .NET on Windows. The Canton-adjacent engineering teams inside those institutions are not going to swap to Java or TypeScript to integrate Canton; in many cases they cannot, because internal supply-chain, build-toolchain, and security-review processes are tuned to the Microsoft ecosystem. .NET is the gap in Canton's language coverage that most named institutional adopters either cross internally with bespoke bridges or route around. Marcin Ziolek (Senior Product Architect, Digital Asset SDK team) confirmed on 2026-04-27 that DA's roadmap remains TypeScript / Java / Python; the .NET quadrant will not be closed by an internal effort.
 
@@ -344,20 +344,32 @@ All milestones are designed to be ≤ 1 quarter in duration with clear acceptanc
 **Verification:** Samples run successfully against LocalNet; documentation site deployed and linked from Canton developer docs. Validation feedback provided.
 
 ### Milestone 4: Adoption & Ecosystem Integration
-- **Estimated Delivery:** opens on M3 acceptance and runs alongside the early quarters of maintenance — adoption timelines for a new SDK in an institutional ecosystem are inherently hard to pre-commit to a fixed window, so M4 closes when the ecosystem gates below are met rather than at a calendar deadline.
-- **Focus:** Active community engagement, compatibility testing, feedback incorporation
+- **Opens:** on M3 acceptance.
+- **Deadline:** **18 months from grant approval** — explicit exception to the standard 9-month default. See *Deadline rationale* below.
+- **Focus:** Active community engagement, compatibility testing, feedback incorporation, structured engagement with regulated TradFi adopters.
+- **Payment structure:** decomposed into per-event tranches at a fixed 100,000 CC per event, plus a conditional +20% acceleration bonus on early full completion (see *Acceleration bonus* below). Partial adoption success translates into partial payout rather than a binary forfeit of the whole milestone. Full breakdown in *Payment Breakdown by Milestone* below.
 - **Deliverables / Value Metrics:**
 
-| Deliverable | Acceptance Criteria |
-|-------------|---------------------|
-| NuGet adoption | ≥500 downloads across at least 3 unique organisations |
-| Real ecosystem usage | At least 2 applications outside Peaceful Studio use the SDK to submit transactions on Canton Network |
-| GitHub engagement | ≥5 external issues or PRs (indicates real usage and feedback loops) |
-| Feedback incorporation | At least 3 community-reported issues resolved |
-| Compatibility verification | Tested against the latest Canton release — 3.4.x today, 3.5 whenever it lands |
-| Conference/meetup presentation (optional) | Present SDK at a Canton or .NET community event if opportunity arises |
+| Deliverable | Acceptance Criteria | Tranche payout |
+|-------------|---------------------|----------------|
+| Adopting TradFi institution | Each regulated TradFi institution (bank, custodian, exchange operator, asset manager) integrating the SDK against a Canton network. Up to 3 institutions credited. | 100,000 CC per institution (up to 300,000 CC) |
+| External application on mainnet | Each application built outside Peaceful Studio that uses the SDK to submit transactions on Canton mainnet. Up to 2 applications credited. | 100,000 CC per application (up to 200,000 CC) |
+| Milestone completion | All of: ≥500 NuGet downloads across ≥3 unique organisations; ≥5 external GitHub issues or PRs; ≥3 community-reported issues resolved; compatibility verified against latest Canton release (3.4.x today; 3.5 if released within the milestone window). | 300,000 CC |
+| Conference/meetup presentation (optional) | Present SDK at a Canton or .NET community event if opportunity arises. | — |
+| **M4 maximum (base)** | | **800,000 CC** |
 
-**Verification:** NuGet download stats, GitHub insights, resolved issue links, and evidence of external applications using the SDK provided to committee.
+**Acceleration bonus.** A +20% bonus of **160,000 CC** is added to the M4 payout if all M4 gates above — per-event tranches plus the milestone-completion criteria — are paid in full within **15 months of grant approval** — three months ahead of the 18-month deadline, leaving roughly nine months of M4 runtime after M3 acceptance (~6 months in, per §Volatility Stipulation) to close adoption events. This follows the convention in merged dev-fund grants (Token Standard V2 +20%, ISS-BFT +20%, LSU +10/20%, PQS +20%, Traffic-Based App Rewards +15%), most of which attach the acceleration clause to a final or adoption milestone rather than to the engineering delivery phase. The bonus pays only if the full base M4 tranche is paid in full — partial M4 completion does not produce a partial bonus. Maximum M4 with acceleration: **960,000 CC**. Maximum grant total with acceleration: **2,660,000 CC**.
+
+**Deadline rationale.** The dev-fund standard is ≤9 months from grant approval. M4 here targets adoption among **regulated TradFi institutions** whose procurement and integration cycles routinely run 9–18 months for the first conversation alone — a structurally slower adopter set than the developer-tooling adopters typical of other dev-fund grants. A 9-month M4 deadline against this adopter profile is near-certain to forfeit the adoption tranche the proportionality-of-payout-to-adoption principle (raised in PR review) was designed to reward. The 18-month deadline is the shortest window in which multiple TradFi institutions can realistically be expected to close integration, and is requested as an explicit exception to the 9-month default with this rationale.
+
+**Foundation collaboration.** Peaceful Studio leads all engineering and integration work and does not condition M4 acceptance on Foundation action. Realistic TradFi adoption against an 18-month deadline does, however, depend on relationship-building that materially benefits from Foundation cooperation. Peaceful Studio requests:
+- Direct introductions to Canton-member institutions with .NET-heavy engineering stacks
+- Inclusion of the SDK in SIG and Foundation-member communications and developer announcements
+- Joint outreach where the Foundation runs institutional-developer programmes
+
+This is a good-faith collaboration ask, not a precondition.
+
+**Verification.** Adopter institutions are evidenced either publicly (named in a roster with their consent, corroborated by repo/press references) or privately (attestation to the Canton Foundation under confidentiality; Foundation confirms to the committee). The private path accommodates TradFi adopters that cannot publicly disclose their stack. Mainnet applications are evidenced by party IDs and on-chain submission. Completion tranche: NuGet stats, GitHub insights, resolved-issue links.
 
 ### Milestone 5+ (Ongoing): Quarterly Maintenance
 - **Estimated Delivery:** Ongoing, quarterly renewal
@@ -393,13 +405,13 @@ The Tech & Ops Committee will evaluate completion based on:
 - NuGet packages published and installable from the public NuGet feed — including the codegen tooling itself and pre-built `Canton.Splice.*` reference bindings for the published Splice DARs
 - Integration tests passing against Canton LocalNet
 - API documentation site deployed and accessible
-- At least 2 external Canton applications (outside Peaceful Studio) using the SDK to submit transactions on Canton Network (M4 ecosystem gate)
+- M4 ecosystem gates — adoption among regulated TradFi institutions (banks, custodians, exchange operators, asset managers) and external Canton applications using the SDK on mainnet — assessed per the per-tranche structure in M4 above
 
 ---
 
 ## Funding
 
-**Total Funding Request:** 2,500,000 CC (~$375,000 USD) for initial delivery (M1–M4), plus 300,000 CC per quarter (~$45,000 USD) for ongoing maintenance. The initial ask is sized at **0.5% of the Development Fund's annual allocation** (500M CC per CIP-0082).
+**Total Funding Request:** 2,500,000 CC base (~$375,000 USD) for initial delivery (M1–M4), with a conditional **+20% M4 acceleration bonus** (up to +160,000 CC, see §M4 *Acceleration bonus*), plus 300,000 CC per quarter (~$45,000 USD) for ongoing maintenance. The base ask is sized at **0.5% of the Development Fund's annual allocation** (500M CC per CIP-0082); with acceleration triggered, the maximum reaches 2,660,000 CC (~$399,000 USD).
 
 ### Cost Basis
 
@@ -407,10 +419,10 @@ The funding is structured as fixed-price milestones, scoped by deliverable compl
 
 | Milestone | Engineering | Infrastructure & Tooling | Community & Adoption | Total |
 |-----------|-------------|--------------------------|---------------------|-------|
-| M1 | **JVM helper + codegen architecture migration to `daml-lf-archive` ([§2](#2-implementation-mechanics))**, SDK packaging, test hardening, NuGet publishing, auth packaging, **first two `Canton.Splice.*` packages with automated codegen pipeline** ($55K) | CI/CD pipeline, cloud CI runners, **NuGet org and namespace coordination, signing infrastructure, automated Splice-release-triggered publish** ($22K) | Quickstart docs, external developer onboarding for ecosystem gate, Foundation coordination ($14K) | **~$91K** |
-| M2 | ~40 API endpoints across gRPC + HTTP, PQS client packaging, async streaming, **remaining `Canton.Splice.*` packages**, multi-synchronizer design commitments ([§3](#3-architectural-alignment--extending-daml--canton-into-the-net-ecosystem)) within the existing envelope ($63K) | Integration test environment (LocalNet, including a multi-synchronizer topology), API compatibility matrix, performance benchmarks ($25K) | End-to-end demo, community outreach, developer integration support ($20K) | **~$108K** |
-| M3 | DocFX API reference site, 2 sample apps (console, ASP.NET Core with Swagger / Scalar including Token Standard interface usage) ($54K) | Documentation hosting, sample app infrastructure ($10K) | Launch coordination with Foundation marketing, external developer onboarding for the M3 ecosystem gate ($22K) | **~$86K** |
-| M4 | Compatibility testing (Canton 3.4.x → 3.5), bug fixes from community feedback ($42K) | Testing infrastructure across Canton versions ($10K) | Community support, adoption tracking and reporting ($38K) | **~$90K** |
+| M1 | **JVM helper + codegen architecture migration to `daml-lf-archive` ([§2](#2-implementation-mechanics))**, SDK packaging, test hardening, NuGet publishing, auth packaging, **first two `Canton.Splice.*` packages with automated codegen pipeline** ($54K) | CI/CD pipeline, cloud CI runners, **NuGet org and namespace coordination, signing infrastructure, automated Splice-release-triggered publish** ($22K) | Quickstart docs, external developer onboarding for ecosystem gate, Foundation coordination ($14K) | **~$90K** |
+| M2 | ~40 API endpoints across gRPC + HTTP, PQS client packaging, async streaming, **remaining `Canton.Splice.*` packages**, multi-synchronizer design commitments ([§3](#3-architectural-alignment--extending-daml--canton-into-the-net-ecosystem)) within the existing envelope ($55K) | Integration test environment (LocalNet, including a multi-synchronizer topology), API compatibility matrix, performance benchmarks ($22K) | End-to-end demo, community outreach, developer integration support ($17K) | **~$94K** |
+| M3 | DocFX API reference site, 2 sample apps (console, ASP.NET Core with Swagger / Scalar including Token Standard interface usage) ($45K) | Documentation hosting, sample app infrastructure ($8K) | Launch coordination with Foundation marketing, external developer onboarding for the M3 ecosystem gate ($18K) | **~$71K** |
+| M4 | Compatibility testing across Canton releases shipped during the milestone window (3.4.x today; 3.5 if released), bug fixes from community feedback, integration support for adopting institutions (up to $30K) | Testing infrastructure across Canton versions (up to $10K) | 18-month institutional outreach, adoption tracking and reporting, conference presence, Foundation co-engagement (up to $80K) | **up to ~$120K** (per-event tranches; see §M4) |
 | M5+ | Protocol compatibility updates, security patches, dependency maintenance, **automated Splice NuGet republish on every Canton/Splice release** ($26K) | CI/CD maintenance, test infrastructure ($9K) | Issue triage, PR reviews, quarterly adoption report ($10K) | **~$45K/quarter** |
 
 **Partially-built versus net-new per milestone (addresses prior reviewer ask on cost-vs-scope):**
@@ -420,7 +432,7 @@ The funding is structured as fixed-price milestones, scoped by deliverable compl
 | M1 | Codegen prototype (single-DAR happy path, direct LF-protobuf parsing), gRPC client foundation, OAuth2/JWT authentication, runtime library covering core Daml types | Open-source release, CI/CD across the production targets, NuGet publishing infrastructure, automated Splice-release-triggered codegen + publish, **JVM helper wrapping `daml-lf-archive` (replaces the PoC's direct-proto parsing — [§2](#2-implementation-mechanics))**, `dpm codegen csharp` plugin, quickstart documentation |
 | M2 | A subset of the gRPC and JSON endpoints exercised by Peaceful Studio's own application; an early PQS prototype | Full ~40-endpoint gRPC + JSON API surface, full PQS client with typed payload filtering, async streaming with backpressure / cancellation / fault tolerance, multi-synchronizer typed-event handling, integration tests against LocalNet |
 | M3 | None | DocFX-driven API reference site, console + ASP.NET Core sample applications, coordinated public launch |
-| M4 | None | Compatibility testing across Canton 3.4.x → 3.5, community engagement, bug-fix turnaround |
+| M4 | None | Compatibility testing across Canton releases shipped during the milestone window (3.4.x today; 3.5 if released), community engagement, bug-fix turnaround |
 | M5+ | None | Ongoing protocol-compatibility tracking, security patches, dependency maintenance, automated Splice republish, quarterly reporting |
 
 **Other notes:**
@@ -433,35 +445,46 @@ The funding is structured as fixed-price milestones, scoped by deliverable compl
 
 | Proposal | Scope | Funding |
 |----------|-------|---------|
-| Go SDKs + Python DAZL (#38, Noders) | Go gRPC client + codegen + wallet SDK + Python patches. | 2,100,000 CC |
+| Go SDKs + Python DAZL (#38, Noders) | Go gRPC client + codegen + wallet SDK + Python patches + Cure53 security audit. | 2,260,000 CC |
 | **This C# SDK (#46)** | **C# codegen + gRPC + JSON API + PQS + samples + cross-platform CI + adoption.** | **2,500,000 CC** |
 | DAR-to-TypeScript Codegen (#74) | Single-purpose codegen tool (TypeScript only) | 330,000 CC |
 | Canton dApp SDK (#69, Digital Asset) | TypeScript dApp-to-wallet SDK (CIP-0103), different stack layer | 8,170,000 CC |
 
-This proposal delivers broader scope than the Go SDK (additional JSON API client, PQS client, dual-protocol coverage, production-target CI matrix) for a comparable total cost, with funding tied to per-milestone ecosystem-adoption gates.
+This proposal delivers broader scope than the Go SDK (additional JSON API client, PQS client, production-target CI matrix) for a comparable total cost, with funding tied to per-milestone ecosystem-adoption gates. A comparable Cure53 security audit is in preparation for this proposal — see [Appendix C](#appendix-c--security-audit-cure53-in-preparation).
 
 ### Payment Breakdown by Milestone
 
-- **Milestone 1** (Open-Source Release & Core): **600,000 CC** upon committee acceptance
-  *Rationale: Establishes the open-source project, CI/CD across platforms, NuGet publishing, and migrates the codegen toolchain onto the `daml-lf-archive` JVM-helper architecture so the SDK inherits LF version dispatch and Smart Contract Upgrade compatibility from the upstream library. Foundational infrastructure that de-risks all subsequent milestones.*
+| Milestone | Payment | % of M1–M4 |
+|---|---|---|
+| M1 — Open-Source Release & Core | 600,000 CC upon committee acceptance | 24% |
+| M2 — Full API Coverage + PQS | 625,000 CC upon committee acceptance | 25% |
+| M3 — Docs, Samples, Launch | 475,000 CC upon committee acceptance | 19% |
+| M4 — Adoption & Ecosystem Integration | up to 800,000 CC, paid per-event | up to 32% |
+| **Total M1–M4 (base)** | **2,500,000 CC** | **100%** |
+| M4 acceleration bonus (conditional, see §M4) | +160,000 CC if all M4 gates met within 15 months of grant approval | (+6%) |
+| **Maximum total M1–M4 with acceleration** | **up to 2,660,000 CC** | **up to 106%** |
+| M5+ — Quarterly Maintenance | 300,000 CC per quarter upon committee acceptance | (separate) |
 
-- **Milestone 2** (Full API Coverage + PQS): **725,000 CC** upon committee acceptance
-  *Rationale: Heaviest engineering milestone — full Ledger API surface across both gRPC and JSON protocols, PQS client, plus async streaming. The dual-protocol approach effectively doubles the client surface area compared to a single-transport SDK.*
+**Milestone 1 (24%) — 600,000 CC upon committee acceptance.** *Establishes the open-source project, CI/CD across platforms, NuGet publishing, and migrates the codegen toolchain onto the `daml-lf-archive` JVM-helper architecture so the SDK inherits LF version dispatch and Smart Contract Upgrade compatibility from the upstream library. Foundational infrastructure that de-risks all subsequent milestones.*
 
-- **Milestone 3** (Docs, Samples, Launch): **575,000 CC** upon committee acceptance
-  *Rationale: Documentation and samples turn a library into an adoptable SDK. Delivers a full API reference site, sample applications (console + ASP.NET Core with Swagger / Scalar, including a realistic Token Standard interface example), and a coordinated community launch.*
+**Milestone 2 (25%) — 625,000 CC upon committee acceptance.** *Heaviest single-engineering milestone — full Ledger API surface across both gRPC and JSON protocols, PQS client, async streaming. Engineering scope unchanged from the prior revision; the modest reduction reflects amortization with the M1 codegen-toolchain foundation, with the JVM helper and `Canton.Splice.*` packaging in place after M1 the per-endpoint marginal effort drops.*
 
-- **Milestone 4** (Adoption & Ecosystem Integration): **600,000 CC** upon committee acceptance
-  *Rationale: Adoption requires active investment — community engagement, compatibility testing, and responsive issue resolution sustained until the ecosystem gates are met. Funding caps the adoption work at this fixed envelope; the milestone simply closes when the gates are reached rather than at a fixed calendar window.*
+**Milestone 3 (19%) — 475,000 CC upon committee acceptance.** *Documentation and samples turn a library into an adoptable SDK. Delivers the DocFX API reference site, console + ASP.NET Core sample applications (including a Token Standard interface example), and a coordinated public launch. The tightened envelope reflects leverage from the M1+M2 surface area: the documentation generator wraps an already-public API surface, and sample apps consume that same surface rather than re-implementing it.*
 
-- **Milestone 5+** (Quarterly Maintenance): **300,000 CC per quarter** upon committee acceptance
-  *Rationale: SDKs without active maintenance become liabilities. Covers protocol compatibility, security patches, dependency updates, and community support.*
+**Milestone 4 (up to 32%) — up to 800,000 CC, paid per-event:**
+- **100,000 CC** per regulated TradFi institution integrating the SDK against a Canton network — up to 3 institutions = **300,000 CC**
+- **100,000 CC** per external application using the SDK on Canton mainnet — up to 2 applications = **200,000 CC**
+- **300,000 CC** on full milestone completion (NuGet + GitHub + compatibility gates per §M4)
 
-> *Context: The total M1–M4 ask of 2,500,000 CC represents 0.5% of the Development Fund's annual allocation of 500M CC (per CIP-0082). USD equivalents are based on a CC/USD rate of $0.15 as of May 2026.*
+*Per-event count (3 TradFi institutions + 2 applications) follows the adoption-gate framing raised in PR review. Per-event payouts ensure that payouts are proportional to demonstrated adoption rather than gated on a single binary trigger that risks forfeiting the entire M4 tranche if one named adopter doesn't close in time. The 300,000 CC completion tranche bundles the secondary ecosystem gates (NuGet downloads, GitHub engagement, compatibility verification) into a single committee-acceptance event. Deadline, Foundation-collaboration framing, and acceleration bonus in §M4.*
+
+**Milestone 5+ — 300,000 CC per quarter upon committee acceptance.** *SDKs without active maintenance become liabilities. Covers protocol compatibility, security patches, dependency updates, and community support.*
+
+> *Context: The base M1–M4 ask of 2,500,000 CC is unchanged from the prior revision and represents 0.5% of the Development Fund's annual allocation of 500M CC (per CIP-0082); with the conditional M4 acceleration bonus triggered, the maximum reaches 2,660,000 CC (≈0.53% of annual allocation). The internal split (M1 24% / M2 25% / M3 19% / M4 up to 32% base) is reweighted toward the adoption milestone in line with recent dev-fund decisions on comparable SDK grants. USD equivalents are based on a CC/USD rate of $0.15 as of May 2026.*
 
 ### Volatility Stipulation
 
-The initial delivery (M1–M4) spans ~36 weeks (~8 months) — i.e. the project duration is **greater than 6 months**. The grant is denominated in fixed Canton Coin and will require a re-evaluation at the 6-month mark, per the standard template clause. The quarterly maintenance milestone (M5+) is re-evaluated each quarter by default at the then-current CC/USD rate. The 6-month re-evaluation also covers scope reality: if the multi-synchronizer surface or the Canton 3.5 transition demands materially more engineering than envelope-priced, that is raised at the same review point.
+M1–M3 engineering delivery spans approximately 6 months from grant approval. M4 then opens on M3 acceptance and runs with an 18-month deadline from grant approval per §M4. The grant is denominated in fixed Canton Coin and will require a re-evaluation at the 6-month mark per the standard template clause — which falls at approximately M3 acceptance — and a second re-evaluation at the 12-month mark to cover the extended M4 window. The quarterly maintenance milestone (M5+) is re-evaluated each quarter by default at the then-current CC/USD rate. The re-evaluation points also cover scope reality: if the multi-synchronizer surface or the Canton 3.5 transition demands materially more engineering than envelope-priced, that is raised at the same review.
 
 ---
 
@@ -532,6 +555,7 @@ By providing first-class .NET support, Canton Network can unlock adoption by tra
 | Low adoption | Adoption milestones with ecosystem gates ensure funding is tied to real usage, not just delivery |
 | Maintainer availability | Maintenance milestone ensures ongoing commitment; documentation enables community takeover if needed |
 | Cross-platform issues | CI matrix covers the production targets (Windows x64, Linux Arm64) plus macOS Arm64 as a developer-experience target, exercised from M1 |
+| Security defects in client-side code paths | Independent third-party security audit (Cure53) scheduled into M3 — see [Appendix C](#appendix-c--security-audit-cure53-in-preparation) |
 
 ---
 
@@ -936,6 +960,42 @@ This is the spec author warning the consumer that the `required` keyword is unre
 ### Bottom line
 
 Generate the C# Ledger API client from the protos. The codegen pipeline already exists in `peacefulstudio/canton-ledger-api-csharp`; validator infrastructure is exactly the workload where streaming and wire efficiency matter; and the OpenAPI spec is materially worse than what `Grpc.Tools` produces from the same upstream definitions. The only reason to touch the JSON Ledger API is for the handful of endpoints that don't exist in gRPC — and for those, a hand-written thin client beats running OpenAPI codegen.
+
+### Postscript — preferred future direction (upstream fix), with the protos-primary plan as the backup
+
+After drafting the appendix above we ran a working experiment: a small upstream PR to `digital-asset/canton` adding `google.api.http` annotations to the v2 service protos makes the OpenAPI regenerable cleanly from the proto source, eliminating defects 1–4 at the root (and proto3 makes defect 5 a non-issue). Side-by-side render on SwaggerHub: [before](https://app.swaggerhub.com/apis/peacefulstudio/json-ledger-api-http-endpoints/3.5.1-SNAPSHOT-oas3) vs [after](https://app.swaggerhub.com/apis/peacefulstudio/canton-http-annotations/1.0). Branches and write-up:
+
+- [`peacefulstudio/canton#1`](https://github.com/peacefulstudio/canton/pull/1) — `CommandService` proof-of-concept (3 RPCs), with reproducible flow and burden-of-evidence artefacts.
+- [`peacefulstudio/canton#2`](https://github.com/peacefulstudio/canton/pull/2) — full-coverage attempt across the v2 service surface. Currently open, not yet defect-free for every endpoint.
+- Companion write-up: [`openApi/upstream-fork-experiment.md`](openApi/upstream-fork-experiment.md).
+
+**If those PRs land upstream in time**, the SDK's JSON HTTP client switches to Kiota-generated off the regenerated clean OpenAPI, with a small (~30 line) `JsonSerializerOptions` adapter for two residual wire-format details (`int64`-as-string per proto-JSON, oneof envelope encoding). This is the preferred future direction.
+
+**If they do not land in time** — or if open issues from PR #2 take longer to resolve than the SDK's delivery window — the proposal as written above remains the plan: protos as source of truth, gRPC primary, hand-written thin clients for the handful of JSON-only endpoints. The SDK ships either way; the upstream fix is a Canton-ecosystem improvement we contribute opportunistically, not a delivery dependency.
+
+----
+
+## Appendix C — Security audit (Cure53), in preparation
+
+The Go SDK proposal (#38) had a third-party security audit by Cure53 added during committee review. The same reasoning applies here: an SDK that TradFi institutions will integrate against Canton on .NET on Windows must clear independent security review before any regulated counterparty can ship it into production. This appendix preempts the request.
+
+**What we've done.** A quote request was sent to `hello@cure53.de` on the 12th of May 2026 covering codegen, gRPC and JSON API clients, PQS client, authentication, and the JVM helper — approximately 13,000 LOC of production C# across `peacefulstudio/canton-ledger-api-csharp` (~3,600 LOC) and `peacefulstudio/daml-codegen-csharp` (~9,000 LOC), plus the Scala JVM helper wrapping `daml-lf-archive` delivered under M1/M2. The request signalled willingness to descope (codegen-only vs. full client surface) so Cure53 can return options rather than a single number.
+
+**Quoting against scope that is still being written.** A meaningful share of the M1–M3 surface — full JSON API coverage, the PQS client, and the JVM helper — only reaches its audited form at M2/M3 completion, so the quote necessarily covers planned scope and LOC estimates rather than a final code drop. This is intentional, not an oversight: waiting until M3 to commission the audit would push the audit itself past the M3 window and defer the security review that institutional adopters expect. Any contingency Cure53 attaches for unwritten portions will be accepted and reflected in the §Funding audit-cost line when the quote is converted into a concrete figure.
+
+**How the audit fits into this proposal.**
+
+- **Remediation engineering — absorbed within the existing envelope, with severity-tiered turnaround.** Fixing findings from a Cure53 review is the same hardening work the M1–M3 Cost Basis already funds: test hardening (M1), defensive validation across the full ~40-endpoint API surface (M2), and authentication and serialisation paths (M1/M2). Peaceful Studio commits to landing all audit remediation within the M1–M3 base of 2,500,000 CC, with the following turnaround relative to Cure53 report delivery:
+  - **Critical / High-severity findings:** patched within **30 days**, prioritised over in-flight engineering work; security advisory published in the same window.
+  - **Medium-severity findings:** remediated within **60 days**.
+  - **Low / Informational findings:** rolled into the next scheduled minor release within the M5+ maintenance window.
+
+  No new milestone, no scope cut on §M1–§M3 deliverables, no shifted M1 or M2 dates.
+- **Cure53 vendor fee — added as a delta once quoted.** The fee itself is a pass-through cost that cannot be sized until the quote arrives. Order-of-magnitude expectation from the #38 precedent (NODERS Go SDK audit ≈ $24,000 USD / ~160,000 CC at $0.15), with potential upward adjustment given the larger code surface area here. The exact figure will be added to §Funding as a separate audit-cost line once Cure53 responds — kept transparent and accounted for separately from engineering payouts.
+
+**Timing.** The audit slots into M3, between M2 acceptance (full API coverage shipped) and M3 launch (coordinated public release), so findings are remediated against the API surface institutions will actually consume rather than a moving target. If Cure53 responds before this proposal is accepted, this appendix is updated with concrete numbers and the audit-cost line is added to §Funding. If the reply arrives after acceptance, the line is added at the next re-evaluation point per §Volatility Stipulation.
+
+**Why proactively.** Asking for the audit ourselves rather than waiting for committee request accelerates the timeline (removing the back-and-forth that delayed #38), lets us coordinate scope with Cure53 directly rather than inheriting a scope written by someone less familiar with the codebase, and signals that institutional security-review expectations are being met from the start.
 
 ----
 
